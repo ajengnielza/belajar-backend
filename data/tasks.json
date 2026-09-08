@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "judul": "Belajar Node.js",
+    "selesai": false
+  },
+  {
+    "id": 2,
+    "judul": "Belajar fs",
+    "selesai": true
+  },
+  {
+    "id": 3,
+    "judul": "Mengerjakan latihan",
+    "selesai": false
+  }
+]
