@@ -67,18 +67,18 @@ async function main() {
     await hitungMundur(3);
     console.log("\n=== SOAL 2  ===");
     const cekPeserta1 = await amanKan(simulasiAmbilPeserta(1));
-    const cekPeserta99 = await amanKan(simulasiAmbilPeserta(99));
+    const cekPeserta88 = await amanKan(simulasiAmbilPeserta(88));
     if (cekPeserta1.sukses) {
         console.log("Berhasil:", cekPeserta1.data);
     }
     else {
         console.log("Gagal:", cekPeserta1.error);
     }
-    if (cekPeserta99.sukses) {
-        console.log("Berhasil:", cekPeserta99.data);
+    if (cekPeserta88.sukses) {
+        console.log("Berhasil:", cekPeserta88.data);
     }
     else {
-        console.log("Gagal:", cekPeserta99.error);
+        console.log("Gagal:", cekPeserta88.error);
     }
     console.log("\n=== SOAL 3 ===");
     const ids = [1, 2, 3];
