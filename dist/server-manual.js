@@ -9,42 +9,29 @@ let peserta = [
     { id: 2, nama: "Ajeng", sekolah: "SMK 1 Malang" },
     { id: 3, nama: "Citra", sekolah: "SMK 5 Malang" },
 ];
-// id berikutnya yang akan dipakai kalau ada peserta baru ditambahkan
 let nextId = 4;
 // Waktu server mulai dijalankan, dipakai untuk hitung uptime di /health
 const startTime = Date.now();
-// ============================================
 // HELPER — supaya kita tidak menulis res.writeHead + res.end berulang-ulang
-// ============================================
 function sendJSON(res, statusCode, data) {
     res.writeHead(statusCode, { "Content-Type": "application/json" });
     res.end(JSON.stringify(data));
 }
-// ============================================
 // SERVER UTAMA
-// ============================================
 const server = http_1.default.createServer((req, res) => {
     const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
     const path = url.pathname;
     const method = req.method;
-    // -------------------------------------------------
-    // SOAL 1: GET /
-    // -------------------------------------------------
+    // SOAL 1: GET 
     if (method === "GET" && path === "/") {
         return sendJSON(res, 200, { pesan: "API Peserta Magang Batch 4" });
     }
-    // -------------------------------------------------
-    // SOAL 1: GET /health
-    // -------------------------------------------------
+    // GET /health
     if (method === "GET" && path === "/health") {
         const uptimeDetik = Math.floor((Date.now() - startTime) / 1000);
         return sendJSON(res, 200, { status: "ok", uptime: uptimeDetik });
     }
-    // -------------------------------------------------
-    // SOAL 2 & 3: GET /peserta  (+ filter query ?sekolah=)
-    // Diletakkan SEBELUM /peserta/:id supaya path persis "/peserta"
-    // tidak ikut ketangkap oleh pengecekan startsWith("/peserta/")
-    // -------------------------------------------------
+    //  GET /peserta  (+ filter query ?sekolah=)
     if (method === "GET" && path === "/peserta") {
         const sekolah = url.searchParams.get("sekolah");
         let hasil = peserta;
@@ -53,9 +40,7 @@ const server = http_1.default.createServer((req, res) => {
         }
         return sendJSON(res, 200, hasil);
     }
-    // -------------------------------------------------
     // SOAL 2: GET /peserta/:id
-    // -------------------------------------------------
     if (method === "GET" && path.startsWith("/peserta/")) {
         const id = Number(path.split("/")[2]);
         const satu = peserta.find((p) => p.id === id);
@@ -64,9 +49,7 @@ const server = http_1.default.createServer((req, res) => {
         }
         return sendJSON(res, 200, satu);
     }
-    // -------------------------------------------------
     // SOAL 4: POST /peserta
-    // -------------------------------------------------
     if (method === "POST" && path === "/peserta") {
         let body = "";
         req.on("data", (chunk) => {
@@ -94,9 +77,7 @@ const server = http_1.default.createServer((req, res) => {
         });
         return; // penting: keluar dari handler, respons dikirim di dalam req.on("end")
     }
-    // -------------------------------------------------
     // SOAL 5: DELETE /peserta/:id
-    // -------------------------------------------------
     if (method === "DELETE" && path.startsWith("/peserta/")) {
         const id = Number(path.split("/")[2]);
         const index = peserta.findIndex((p) => p.id === id);
@@ -104,12 +85,9 @@ const server = http_1.default.createServer((req, res) => {
             return sendJSON(res, 404, { error: `Peserta dengan id ${id} tidak ditemukan` });
         }
         peserta.splice(index, 1);
-        res.writeHead(204); // 204 tidak boleh punya body
+        res.writeHead(204);
         return res.end();
     }
-    // -------------------------------------------------
-    // Tidak ada rute yang cocok → 404
-    // -------------------------------------------------
     return sendJSON(res, 404, { error: `Route tidak ditemukan: ${method} ${path}` });
 });
 const PORT = 3000;
